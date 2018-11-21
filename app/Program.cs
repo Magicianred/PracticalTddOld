@@ -24,18 +24,28 @@ namespace app
 
             for (int i = 0; i < framesPartialScore.Length; i++)
             {
-                if(i < framesPartialScore.Length - 1){
-                    if(framesPartialScore[i] == 10){
-                       framesScore[i] += framesPartialScore[i + 1];
+                if(framesPartialScore[i] == 10)
+                {
+                    if(i < framesPartialScore.Length - 1)
+                    {
+                        framesScore[i] += framesPartialScore[i + 1];
+                    }
+                    else
+                    {
+
+                        framesScore[i] = -1;
                     }
                 }
             }
 
-            int totalScore = framesScore.Sum();
+            int totalScore = framesScore
+                .Where(score => score > 0)
+                .Sum();
+
             Console.WriteLine(args[1]);
             Console.WriteLine(framesScore
-                .Aggregate("", (acc, rollScore) => $"{acc}{(acc == string.Empty ? string.Empty : ",")}{rollScore}"));
-            Console.WriteLine(totalScore);
+                .Aggregate("", (acc, rollScore) => $"{acc}{(acc == string.Empty ? string.Empty : ",")}{(rollScore < 0 ? "-" : rollScore.ToString())}"));
+            Console.WriteLine(totalScore > 0 ? totalScore.ToString() : "-");
         }
     }
 }
