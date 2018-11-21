@@ -8,9 +8,8 @@ namespace tests
     public class AsAPlayer_IWant_ToKnow_MyBowlingPoints
     {
         [Theory]
-        [InlineData("10,10,10,10,10,10,10,10,10,10-10-10", "30,30,30,30,30,30,30,30,30,30", "300")]
-        [InlineData("1-1,1-1,1-1,1-1,1-1,1-1,1-1,1-1,1-1,1-1-1", "2,2,2,2,2,2,2,2,2,3", "21")]
-        [InlineData("1-1,1-1,1-1,1-1,1-1,1-1,1-1,1-1,1-1,1-1-1", "2,2,2,2,2,2,2,2,2,3", "21")]
+        [InlineData("10,10,10,10,10,10,10,10,10,10-10-10", "30,30,30,30,30,30,30,30,30,30", "300")] // All strikes
+        [InlineData("1-1,1-1,1-1,1-1,1-1,1-1,1-1,1-1,1-1,1-1-1", "2,2,2,2,2,2,2,2,2,3", "21")] // All open frames
         public void RunningTheProgram_WithGivenInputString_WillWriteTheOutput_InTheConsole(string rolls, string expectedScoreByFrame, string expectedTotalScore)
         {
             //Execute

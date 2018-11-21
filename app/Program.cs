@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace app
 {
@@ -6,9 +8,20 @@ namespace app
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("10,10,10,10,10,10,10,10,10,10-10-10");
-            Console.WriteLine("30,30,30,30,30,30,30,30,30,30");
-            Console.WriteLine("300");
+            string[] inputRollsStr = args[1].Split(',');
+            int[] inputScorebyRolls = inputRollsStr
+                .Select(rollPairStr => rollPairStr.Split('-'))
+                .Select(rollPair => Array.ConvertAll(rollPair, rollStr => Convert.ToInt32(rollStr)))
+                .Select(roll => roll[0] == 10 ? new []{30} : roll )
+                .Select(roll => roll.Sum())
+                .ToArray();
+
+
+            int totalScore = inputScorebyRolls.Sum();
+            Console.WriteLine(args[1]);
+            Console.WriteLine(inputScorebyRolls
+                .Aggregate("", (acc, rollScore) => $"{acc}{(acc == string.Empty ? string.Empty : ",")}{rollScore}"));
+            Console.WriteLine(totalScore);
         }
     }
 }
