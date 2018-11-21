@@ -12,27 +12,31 @@ namespace app
             int[][] frames = inputFramesStr
                 .Select(frameInputStr => frameInputStr.Split('-'))
                 .Select(frameAsStr => Array.ConvertAll(frameAsStr, rollStr => Convert.ToInt32(rollStr)))
-                .Select(frame => frame[0] == 10 ? new []{30} : frame )
                 .ToArray();
 
-            int[] framesPartialScore = frames
-                .Select(frame => frame.Sum())
+            KeyValuePair<int, int>[] framesPartialScore = frames
+                .Select(frame => KeyValuePair.Create((frame.Length % 2) + 1, frame.Sum()))
                 .ToArray();
 
             int[] framesScore = new int[framesPartialScore.Length];
-            Array.Copy(framesPartialScore, framesScore, framesPartialScore.Length);
+            Array.Copy(framesPartialScore.Select(partialScore => partialScore.Value).ToArray(), framesScore, framesPartialScore.Length);
 
             for (int i = 0; i < framesPartialScore.Length; i++)
             {
-                if(framesPartialScore[i] == 10)
+
+                int score = framesPartialScore[i].Value;
+                int framesToAdd = framesPartialScore[i].Key;
+                if (score == 10)
                 {
-                    if(i < framesPartialScore.Length - 1)
+                    if (i < framesPartialScore.Length - framesToAdd)
                     {
-                        framesScore[i] += framesPartialScore[i + 1];
+                        for (int j = 0; j < framesToAdd; j++)
+                        {
+                            framesScore[i] += framesPartialScore[i + j + 1].Value;
+                        }
                     }
                     else
                     {
-
                         framesScore[i] = -1;
                     }
                 }
