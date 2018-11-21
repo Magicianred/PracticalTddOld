@@ -7,14 +7,12 @@ namespace tests
 {
     public class AsAPlayer_IWant_ToKnow_MyBowlingPoints
     {
-        [Fact]
-        public void RunningTheProgram_WithGivenInputString_WillWriteTheOutput_InTheConsole()
+        [Theory]
+        [InlineData("10,10,10,10,10,10,10,10,10,10-10-10", "30,30,30,30,30,30,30,30,30,30", "300")]
+        [InlineData("1-1,1-1,1-1,1-1,1-1,1-1,1-1,1-1,1-1,1-1-1", "2,2,2,2,2,2,2,2,2,3", "21")]
+        [InlineData("1-1,1-1,1-1,1-1,1-1,1-1,1-1,1-1,1-1,1-1-1", "2,2,2,2,2,2,2,2,2,3", "21")]
+        public void RunningTheProgram_WithGivenInputString_WillWriteTheOutput_InTheConsole(string rolls, string expectedScoreByFrame, string expectedTotalScore)
         {
-            //Arrange
-            string rolls = "10,10,10,10,10,10,10,10,10,10-10-10";
-            string expectedScoreByFrame = "30,30,30,30,30,30,30,30,30,30";
-            string expectedTotalScore = "300";
-
             //Execute
             using(StringWriter sw = new StringWriter())
             {
