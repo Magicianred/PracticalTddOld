@@ -38,16 +38,18 @@ namespace app
                     else
                     {
                         framesScore[i] = -1;
+                        break;
                     }
                 }
             }
 
             int totalScore = framesScore
-                .Where(score => score > 0)
+                .TakeWhile(score => score > 0)
                 .Sum();
 
             Console.WriteLine(args[1]);
             Console.WriteLine(framesScore
+                .Take(framesScore.TakeWhile(score => score > 0).Count() + 1)
                 .Aggregate("", (acc, rollScore) => $"{acc}{(acc == string.Empty ? string.Empty : ",")}{(rollScore < 0 ? "-" : rollScore.ToString())}"));
             Console.WriteLine(totalScore > 0 ? totalScore.ToString() : "-");
         }

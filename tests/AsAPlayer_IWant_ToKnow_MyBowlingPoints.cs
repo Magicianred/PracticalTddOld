@@ -18,6 +18,12 @@ namespace tests
         [InlineData("10,8-0,1-3", "22,8,4", "34")] // One closed Strike
         [InlineData("10,10,8-0,1-3", "28,22,8,4", "62")] // Two consecutives closed Strikes
         [InlineData("10,8-2,1-3", "24,14,4", "42")] // One closed Strike followed by one closed Spare
+        [InlineData("8-2,10,1-3,2-5", "20,21,4,7", "52")] // One closed Spare followed by one closed Strike
+        [InlineData("8-2,10,1-3,2-5", "20,21,4,7", "52")] // One open Strike with one following roll
+        [InlineData("10,4-5", "-", "-")] // One open Strike with one following roll
+        [InlineData("10", "-", "-")] // One open Strike with no following roll
+        [InlineData("10,5-5", "-", "-")] // One open Strike with one open Spare
+        [InlineData("5-5,10", "20,-", "20")] // One Spare with one open Strike
         public void RunningTheProgram_WithGivenInputString_WillWriteTheOutput_InTheConsole(string rolls, string expectedScoreByFrame, string expectedTotalScore)
         {
             //Execute
