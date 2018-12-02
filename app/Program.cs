@@ -8,6 +8,14 @@ namespace app
     {
         public static void Main(string[] args)
         {
+            List<int[]> frames = InitializeFrames(args);
+            int[] framesScore = CalculateFramesScores(frames);
+            int totalScore = CalculateTotalScore(framesScore);
+            OutputScoresToConsole(args, framesScore, totalScore);
+        }
+
+        private static List<int[]> InitializeFrames(string[] args)
+        {
             string[] inputFramesStr = args[1].Split(',');
             int[][] frames = inputFramesStr
                 .Select(frameInputStr => frameInputStr.Split('-'))
@@ -17,24 +25,29 @@ namespace app
             List<int[]> standardFrames = frames.Where(frame => frame.Length < 3).ToList();
             int[] lastFrame = frames.Where(frame => frame.Length == 3).FirstOrDefault() ?? new int[0];
 
-            if(lastFrame.Length > 0)
+            if (lastFrame.Length > 0)
             {
-                if(lastFrame.First() == 10)
+                if (lastFrame.First() == 10)
                 {
-                    standardFrames.Add(new int[]{lastFrame.First()});
-                    standardFrames.Add(new int[]{lastFrame[1]});
-                    standardFrames.Add(new int[]{lastFrame[2]});
+                    standardFrames.Add(new int[] { lastFrame.First() });
+                    standardFrames.Add(new int[] { lastFrame[1] });
+                    standardFrames.Add(new int[] { lastFrame[2] });
                 }
                 else
                 {
-                    standardFrames.Add(new int[]{lastFrame[0], lastFrame[1]});
-                    standardFrames.Add(new int[]{lastFrame.Last()});
+                    standardFrames.Add(new int[] { lastFrame[0], lastFrame[1] });
+                    standardFrames.Add(new int[] { lastFrame.Last() });
                 }
             }
 
+            return standardFrames;
+        }
+
+        private static int[] CalculateFramesScores(List<int[]> standardFrames)
+        {
             KeyValuePair<int, int>[] framesPartialScore = standardFrames
-                .Select(frame => KeyValuePair.Create((frame.Length % 2) + 1, frame.Sum()))
-                .ToArray();
+                            .Select(frame => KeyValuePair.Create((frame.Length % 2) + 1, frame.Sum()))
+                            .ToArray();
 
             int length = framesPartialScore.Length > 10 ? framesPartialScore.Length - 1 : framesPartialScore.Length;
             int[] framesScore = new int[length];
@@ -61,11 +74,19 @@ namespace app
                 }
             }
 
-            int totalScore = framesScore
-                .Take(10)
-                .TakeWhile(score => score > 0)
-                .Sum();
+            return framesScore;
+        }
 
+        private static int CalculateTotalScore(int[] framesScore)
+        {
+            return framesScore
+                            .Take(10)
+                            .TakeWhile(score => score > 0)
+                            .Sum();
+        }
+
+        private static void OutputScoresToConsole(string[] args, int[] framesScore, int totalScore)
+        {
             Console.WriteLine(args[1]);
             Console.WriteLine(framesScore
                 .Take(10)
