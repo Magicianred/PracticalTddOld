@@ -8,46 +8,53 @@ namespace app
     {
         public static void Main(string[] args)
         {
-            List<int[]> frames = InitializeFrames(args);
+            List<Roll[]> frames = InitializeFrames(args);
             int[] framesScore = CalculateFramesScores(frames);
             int totalScore = CalculateTotalScore(framesScore);
             OutputScoresToConsole(args, framesScore, totalScore);
         }
 
-        private static List<int[]> InitializeFrames(string[] args)
+        private static List<Roll[]> InitializeFrames(string[] args)
         {
             string[] inputFramesStr = args[1].Split(',');
-            int[][] frames = inputFramesStr
-                .Select(frameInputStr => frameInputStr.Split('-'))
-                .Select(frameAsStr => Array.ConvertAll(frameAsStr, rollStr => Convert.ToInt32(rollStr)))
-                .ToArray();
+            Roll[][] frames = StringToArrayOfIntFrames(inputFramesStr);
+            return ConvertLastFrameToAStandardFrame(frames);
+        }
 
-            List<int[]> standardFrames = frames.Where(frame => frame.Length < 3).ToList();
-            int[] lastFrame = frames.Where(frame => frame.Length == 3).FirstOrDefault() ?? new int[0];
+        private static List<Roll[]> ConvertLastFrameToAStandardFrame(Roll[][] frames)
+        {
+            List<Roll[]> standardFrames = frames.Where(frame => frame.Length < 3).ToList();
+            Roll[] lastFrame = frames.Where(frame => frame.Length == 3).FirstOrDefault() ?? new Roll[0];
 
             if (lastFrame.Length > 0)
             {
-                if (lastFrame.First() == 10)
+                if (lastFrame.First().RollValue == 10)
                 {
-                    standardFrames.Add(new int[] { lastFrame.First() });
-                    standardFrames.Add(new int[] { lastFrame[1] });
-                    standardFrames.Add(new int[] { lastFrame[2] });
+                    standardFrames.Add(new Roll[] { lastFrame.First() });
+                    standardFrames.Add(new Roll[] { lastFrame[1] });
+                    standardFrames.Add(new Roll[] { lastFrame[2] });
                 }
                 else
                 {
-                    standardFrames.Add(new int[] { lastFrame[0], lastFrame[1] });
-                    standardFrames.Add(new int[] { lastFrame.Last() });
+                    standardFrames.Add(new Roll[] { lastFrame[0], lastFrame[1] });
+                    standardFrames.Add(new Roll[] { lastFrame.Last() });
                 }
             }
 
             return standardFrames;
         }
 
-        private static int[] CalculateFramesScores(List<int[]> standardFrames)
+        private static Roll[][] StringToArrayOfIntFrames(string[] inputFramesStr)
         {
-            KeyValuePair<int, int>[] framesPartialScore = standardFrames
-                            .Select(frame => KeyValuePair.Create((frame.Length % 2) + 1, frame.Sum()))
-                            .ToArray();
+            return inputFramesStr
+                .Select(frameInputStr => frameInputStr.Split('-'))
+                .Select(frameAsStr => Array.ConvertAll(frameAsStr, rollStr => new Roll(Convert.ToInt32(rollStr))))
+                .ToArray();
+        }
+
+        private static int[] CalculateFramesScores(List<Roll[]> standardFrames)
+        {
+            KeyValuePair<int, int>[] framesPartialScore = ComputePartialScores(standardFrames);
 
             int length = framesPartialScore.Length > 10 ? framesPartialScore.Length - 1 : framesPartialScore.Length;
             int[] framesScore = new int[length];
@@ -77,6 +84,13 @@ namespace app
             return framesScore;
         }
 
+        private static KeyValuePair<int, int>[] ComputePartialScores(List<Roll[]> standardFrames)
+        {
+            return standardFrames
+                .Select(frame => KeyValuePair.Create((frame.Length % 2) + 1, frame.Sum(roll => roll.RollValue)))
+                .ToArray();
+        }
+
         private static int CalculateTotalScore(int[] framesScore)
         {
             return framesScore
@@ -94,5 +108,16 @@ namespace app
                 .Aggregate("", (acc, rollScore) => $"{acc}{(acc == string.Empty ? string.Empty : ",")}{(rollScore < 0 ? "-" : rollScore.ToString())}"));
             Console.WriteLine(totalScore > 0 ? totalScore.ToString() : "-");
         }
+    }
+
+    public class Roll
+    {
+
+        public Roll(int rollValue)
+        {
+            RollValue = rollValue;
+        }
+
+        public int RollValue { get; }
     }
 }
