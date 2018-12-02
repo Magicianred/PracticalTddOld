@@ -16,9 +16,10 @@ namespace app
 
         private static List<Roll[]> InitializeFrames(string[] args)
         {
-            string[] inputFramesStr = args[1].Split(',');
-            Roll[][] frames = StringToArrayOfIntFrames(inputFramesStr);
-            return ConvertLastFrameToAStandardFrame(frames);
+            return null;
+            // string[] inputFramesStr = args[1].Split(',');
+            // Roll[][] frames = StringToArrayOfIntFrames(inputFramesStr);
+            // return ConvertLastFrameToAStandardFrame(frames);
         }
 
         private static List<Roll[]> ConvertLastFrameToAStandardFrame(Roll[][] frames)
@@ -44,11 +45,11 @@ namespace app
             return standardFrames;
         }
 
-        private static Roll[][] StringToArrayOfIntFrames(string[] inputFramesStr)
+        private static IBowlingFrame[] StringToArrayOfIntFrames(string[] inputFramesStr)
         {
             return inputFramesStr
                 .Select(frameInputStr => frameInputStr.Split('-'))
-                .Select(frameAsStr => Array.ConvertAll(frameAsStr, rollStr => new Roll(Convert.ToInt32(rollStr))))
+                .Select(frameAsStr => BowlingFrames.From(Array.ConvertAll(frameAsStr, rollStr => new Roll(Convert.ToInt32(rollStr)))))
                 .ToArray();
         }
 
@@ -108,16 +109,5 @@ namespace app
                 .Aggregate("", (acc, rollScore) => $"{acc}{(acc == string.Empty ? string.Empty : ",")}{(rollScore < 0 ? "-" : rollScore.ToString())}"));
             Console.WriteLine(totalScore > 0 ? totalScore.ToString() : "-");
         }
-    }
-
-    public class Roll
-    {
-
-        public Roll(int rollValue)
-        {
-            RollValue = rollValue;
-        }
-
-        public int RollValue { get; }
     }
 }
