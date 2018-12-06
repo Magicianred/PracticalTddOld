@@ -8,44 +8,44 @@ namespace app
     {
         public static void Main(string[] args)
         {
-            List<Roll[]> frames = InitializeFrames(args);
+            List<IBowlingFrame> frames = InitializeFrames(args);
             int[] framesScore = CalculateFramesScores(frames);
             int totalScore = CalculateTotalScore(framesScore);
             OutputScoresToConsole(args, framesScore, totalScore);
         }
 
-        private static List<Roll[]> InitializeFrames(string[] args)
+        private static List<IBowlingFrame> InitializeFrames(string[] args)
         {
-            return null;
-            // string[] inputFramesStr = args[1].Split(',');
-            // Roll[][] frames = StringToArrayOfIntFrames(inputFramesStr);
-            // return ConvertLastFrameToAStandardFrame(frames);
+            string[] inputFramesStr = args[1].Split(',');
+            IBowlingFrame[] frames = StringToArrayOfFrames(inputFramesStr);
+            return ConvertLastFrameToAStandardFrame(frames);
         }
 
-        private static List<Roll[]> ConvertLastFrameToAStandardFrame(Roll[][] frames)
+        private static List<IBowlingFrame> ConvertLastFrameToAStandardFrame(IBowlingFrame[] frames)
         {
-            List<Roll[]> standardFrames = frames.Where(frame => frame.Length < 3).ToList();
-            Roll[] lastFrame = frames.Where(frame => frame.Length == 3).FirstOrDefault() ?? new Roll[0];
+            // List<Roll[]> standardFrames = frames.Where(frame => frame.Length < 3).ToList();
+            // Roll[] lastFrame = frames.Where(frame => frame.Length == 3).FirstOrDefault() ?? new Roll[0];
 
-            if (lastFrame.Length > 0)
-            {
-                if (lastFrame.First().RollValue == 10)
-                {
-                    standardFrames.Add(new Roll[] { lastFrame.First() });
-                    standardFrames.Add(new Roll[] { lastFrame[1] });
-                    standardFrames.Add(new Roll[] { lastFrame[2] });
-                }
-                else
-                {
-                    standardFrames.Add(new Roll[] { lastFrame[0], lastFrame[1] });
-                    standardFrames.Add(new Roll[] { lastFrame.Last() });
-                }
-            }
+            // if (lastFrame.Length > 0)
+            // {
+            //     if (lastFrame.First().RollValue == 10)
+            //     {
+            //         standardFrames.Add(new Roll[] { lastFrame.First() });
+            //         standardFrames.Add(new Roll[] { lastFrame[1] });
+            //         standardFrames.Add(new Roll[] { lastFrame[2] });
+            //     }
+            //     else
+            //     {
+            //         standardFrames.Add(new Roll[] { lastFrame[0], lastFrame[1] });
+            //         standardFrames.Add(new Roll[] { lastFrame.Last() });
+            //     }
+            // }
 
-            return standardFrames;
+            // return standardFrames;
+            return frames.ToList();
         }
 
-        private static IBowlingFrame[] StringToArrayOfIntFrames(string[] inputFramesStr)
+        private static IBowlingFrame[] StringToArrayOfFrames(string[] inputFramesStr)
         {
             return inputFramesStr
                 .Select(frameInputStr => frameInputStr.Split('-'))
@@ -53,36 +53,46 @@ namespace app
                 .ToArray();
         }
 
-        private static int[] CalculateFramesScores(List<Roll[]> standardFrames)
+        private static int[] CalculateFramesScores(List<IBowlingFrame> frames)
         {
-            KeyValuePair<int, int>[] framesPartialScore = ComputePartialScores(standardFrames);
+            List<int> scores = new List<int>();
+            var framesQueue = new Queue<IBowlingFrame>(frames);
 
-            int length = framesPartialScore.Length > 10 ? framesPartialScore.Length - 1 : framesPartialScore.Length;
-            int[] framesScore = new int[length];
-            Array.Copy(framesPartialScore.Select(partialScore => partialScore.Value).ToArray(), framesScore, length);
-
-            for (int i = 0; i < framesPartialScore.Length && i < 10; i++)
-            {
-                int score = framesPartialScore[i].Value;
-                int framesToAdd = framesPartialScore[i].Key;
-                if (score == 10)
-                {
-                    if (i < framesPartialScore.Length - framesToAdd)
-                    {
-                        for (int j = 0; j < framesToAdd; j++)
-                        {
-                            framesScore[i] += framesPartialScore[i + j + 1].Value;
-                        }
-                    }
-                    else
-                    {
-                        framesScore[i] = -1;
-                        break;
-                    }
-                }
+            while(framesQueue.TryDequeue(out var frame)){
+                int score = frame.GetScore(framesQueue);
+                scores.Add(score);
             }
 
-            return framesScore;
+            return scores.ToArray();
+
+            // KeyValuePair<int, int>[] framesPartialScore = ComputePartialScores(frames);
+
+            // int length = framesPartialScore.Length > 10 ? framesPartialScore.Length - 1 : framesPartialScore.Length;
+            // int[] framesScore = new int[length];
+            // Array.Copy(framesPartialScore.Select(partialScore => partialScore.Value).ToArray(), framesScore, length);
+
+            // for (int i = 0; i < framesPartialScore.Length && i < 10; i++)
+            // {
+            //     int score = framesPartialScore[i].Value;
+            //     int framesToAdd = framesPartialScore[i].Key;
+            //     if (score == 10)
+            //     {
+            //         if (i < framesPartialScore.Length - framesToAdd)
+            //         {
+            //             for (int j = 0; j < framesToAdd; j++)
+            //             {
+            //                 framesScore[i] += framesPartialScore[i + j + 1].Value;
+            //             }
+            //         }
+            //         else
+            //         {
+            //             framesScore[i] = -1;
+            //             break;
+            //         }
+            //     }
+            // }
+
+            // return framesScore;
         }
 
         private static KeyValuePair<int, int>[] ComputePartialScores(List<Roll[]> standardFrames)

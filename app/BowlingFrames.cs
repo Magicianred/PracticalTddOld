@@ -9,10 +9,10 @@ namespace app
         {
             int rollSum = rolls.Sum(roll => roll.RollValue);
 
-            if(rollSum == 10 && rolls.Length == 1) return new StrikeFrame(rolls);
-            if(rollSum == 10) return new SpareFrame(rolls);
+            if(rollSum == 10 && rolls.Length == 1) return new StrikeFrame();
+            if(rollSum == 10) return new SpareFrame(rolls[0]);
 
-            return new OpenFrame(rolls);
+            return new OpenFrame(rolls[0], rolls[1]);
         }
     }
 }
