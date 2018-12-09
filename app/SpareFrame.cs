@@ -14,11 +14,16 @@ namespace app
 
         public int OpenValue => 10;
 
-        public int GetScore(Queue<IBowlingFrame> framesStack)
-        {
-            if(framesStack.Count < 1) return -1;
+        public int Consumes => 1;
 
-            return OpenValue + framesStack.First().OpenValue;
+        public int GetScore(BowlingFramesQueue frames)
+        {
+            return frames.GetCurrentScore(this, 1);
+        }
+
+        public List<IBowlingFrame> GetInternalFrames()
+        {
+            return new List<IBowlingFrame>(){this};
         }
     }
 }

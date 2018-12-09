@@ -33,6 +33,27 @@ namespace tests.unit
             IBowlingFrame frame = BowlingFrames.From(new Roll[]{roll1});
             Assert.IsType<StrikeFrame>(frame);
         }
+
+        [Fact]
+        public void LastFrameCreationWith_TwoRolls()
+        {
+            var roll1 = new Roll(1);
+            var roll2 = new Roll(1);
+
+            IBowlingFrame frame = BowlingFrames.From(new Roll[]{roll1, roll2}, 10);
+            Assert.IsType<LastFrame>(frame);
+        }
+
+        [Fact]
+        public void LastFrameCreationWith_ThreeRolls()
+        {
+            var roll1 = new Roll(5);
+            var roll2 = new Roll(5);
+            var roll3 = new Roll(1);
+
+            IBowlingFrame frame = BowlingFrames.From(new Roll[]{roll1, roll2, roll3}, 10);
+            Assert.IsType<LastFrame>(frame);
+        }
     }
 
 

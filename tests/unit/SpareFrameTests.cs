@@ -18,7 +18,7 @@ namespace tests.unit
         [Fact]
         public void Expectations_From_GetScore()
         {
-            var frames = new Queue<IBowlingFrame>(new []{ _other });
+            var frames = new BowlingFramesQueue(new []{ _other });
             Assert.Equal(12, _frameUnderTest.GetScore(frames));
         }
 
@@ -26,7 +26,7 @@ namespace tests.unit
         [Fact]
         public void Expectations_From_GetScore_OfAnOpen_SpareFrame()
         {
-            var frames = new Queue<IBowlingFrame>();
+            var frames = new BowlingFramesQueue();
             Assert.Equal(-1, _frameUnderTest.GetScore(frames));
         }
 
@@ -34,6 +34,12 @@ namespace tests.unit
         public void Expectations_FromOpenFrame_OpenValue()
         {
             Assert.Equal(10, _frameUnderTest.OpenValue);
+        }
+
+        [Fact]
+        public void SpareFrame_Consumes1()
+        {
+            Assert.Equal(1, _frameUnderTest.Consumes);
         }
     }
 }

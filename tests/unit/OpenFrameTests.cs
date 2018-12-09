@@ -6,26 +6,32 @@ namespace tests.unit
 {
     public class OpenFrameTests
     {
-        OpenFrame _frameOnTest;
+        OpenFrame _frameUnderTest;
         OpenFrame _other;
 
         public OpenFrameTests()
         {
-            _frameOnTest = new OpenFrame(new Roll(1), new Roll(1));
+            _frameUnderTest = new OpenFrame(new Roll(1), new Roll(1));
             _other = new OpenFrame(new Roll(1), new Roll(1));
         }
 
         [Fact]
         public void Expectations_FromOpenFrame_GetScore()
         {
-            var frames = new Queue<IBowlingFrame>(new []{ _other });
-            Assert.Equal(2, _frameOnTest.GetScore(frames));
+            var frames = new BowlingFramesQueue(new []{ _other });
+            Assert.Equal(2, _frameUnderTest.GetScore(frames));
         }
 
         [Fact]
         public void Expectations_FromOpenFrame_OpenValue()
         {
-            Assert.Equal(2, _frameOnTest.OpenValue);
+            Assert.Equal(2, _frameUnderTest.OpenValue);
+        }
+
+        [Fact]
+        public void OpenFrame_Consumes1()
+        {
+            Assert.Equal(1, _frameUnderTest.Consumes);
         }
     }
 }

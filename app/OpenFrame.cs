@@ -13,7 +13,14 @@ namespace app {
 
         public int OpenValue => _rollSum;
 
-        public int GetScore(Queue<IBowlingFrame> framesStack)
+        public int Consumes => 1;
+
+        public List<IBowlingFrame> GetInternalFrames()
+        {
+            return new List<IBowlingFrame>(){this};
+        }
+
+        public int GetScore(BowlingFramesQueue frames)
         {
             return _rollSum;
         }
