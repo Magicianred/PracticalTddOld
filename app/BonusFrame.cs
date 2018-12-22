@@ -20,13 +20,13 @@ namespace app
             _sum = _rolls.Sum(roll => roll.RollValue);
         }
 
-        public int Consumes => 1;
+        public int ConsumesRolls => 1;
 
         public int OpenValue => _sum;
 
-        public int GetScore(BowlingFramesQueue frames)
+        public IFrameScore GetScore(BowlingFramesQueue frames)
         {
-            return _sum;
+            return new FrameScore(_sum);
         }
 
         public List<IBowlingFrame> GetInternalFrames()

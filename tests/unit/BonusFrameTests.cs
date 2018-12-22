@@ -16,7 +16,7 @@ namespace tests.unit
         [Fact]
         public void Expectations_FromBonusFrame_GetScore()
         {
-            Assert.Equal(2, _frameUnderTest.GetScore(new BowlingFramesQueue()));
+            Assert.Equal(2, _frameUnderTest.GetScore(new BowlingFramesQueue()).Value);
         }
 
         [Fact]
@@ -28,7 +28,7 @@ namespace tests.unit
         [Fact]
         public void BonusFrame_Consumes1()
         {
-            Assert.Equal(1, _frameUnderTest.Consumes);
+            Assert.Equal(1, _frameUnderTest.ConsumesRolls);
         }
     }
 }

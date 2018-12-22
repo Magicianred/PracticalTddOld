@@ -14,14 +14,14 @@ namespace app
 
         public int OpenValue => _roll.RollValue;
 
-        public int Consumes => 1;
+        public int ConsumesRolls => 1;
 
         public List<IBowlingFrame> GetInternalFrames()
         {
             return new List<IBowlingFrame>(){this};
         }
 
-        public int GetScore(BowlingFramesQueue frames)
+        public IFrameScore GetScore(BowlingFramesQueue frames)
         {
             return frames.GetCurrentScore(this, 2);
         }

@@ -19,7 +19,7 @@ namespace tests.unit
         public void Expectations_FromOpenFrame_GetScore()
         {
             var frames = new BowlingFramesQueue(new []{ _other });
-            Assert.Equal(2, _frameUnderTest.GetScore(frames));
+            Assert.Equal(2, _frameUnderTest.GetScore(frames).Value);
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace tests.unit
         [Fact]
         public void OpenFrame_Consumes1()
         {
-            Assert.Equal(1, _frameUnderTest.Consumes);
+            Assert.Equal(1, _frameUnderTest.ConsumesRolls);
         }
     }
 }

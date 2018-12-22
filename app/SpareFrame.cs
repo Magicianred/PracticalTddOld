@@ -14,9 +14,9 @@ namespace app
 
         public int OpenValue => 10;
 
-        public int Consumes => 1;
+        public int ConsumesRolls => 1;
 
-        public int GetScore(BowlingFramesQueue frames)
+        public IFrameScore GetScore(BowlingFramesQueue frames)
         {
             return frames.GetCurrentScore(this, 1);
         }

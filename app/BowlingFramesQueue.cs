@@ -23,14 +23,14 @@ namespace app
             return _framesQueue.TryDequeue(out frame);
         }
 
-        public int GetCurrentScore(IBowlingFrame currentFrame, int howManyScores)
+        public IFrameScore GetCurrentScore(IBowlingFrame currentFrame, int howManyRolls)
         {
-            if(_framesQueue.Sum(frame => frame.Consumes) < howManyScores) return -1;
+            if(_framesQueue.Sum(frame => frame.ConsumesRolls) < howManyRolls) return new OpenScore();
 
-            return currentFrame.OpenValue+ _framesQueue
+            return new FrameScore(currentFrame.OpenValue + _framesQueue
                 .SelectMany(frame => frame.GetInternalFrames())
-                .Take(howManyScores)
-                .Sum(frame => frame.OpenValue);
+                .Take(howManyRolls)
+                .Sum(frame => frame.OpenValue));
         }
     }
 }

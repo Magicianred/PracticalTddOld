@@ -4,10 +4,10 @@ namespace app
 {
     public interface IBowlingFrame
     {
-        int GetScore(BowlingFramesQueue framesQueue);
+        IFrameScore GetScore(BowlingFramesQueue framesQueue);
         int OpenValue { get; }
 
-        int Consumes { get; }
+        int ConsumesRolls { get; }
 
         List<IBowlingFrame> GetInternalFrames();
     }

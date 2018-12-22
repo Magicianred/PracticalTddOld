@@ -41,11 +41,11 @@ namespace app
 
         public int OpenValue => _internalFrames.Sum(frame => frame.OpenValue);
 
-        public int Consumes => 2;
+        public int ConsumesRolls => 2;
 
-        public int GetScore(BowlingFramesQueue frames)
+        public IFrameScore GetScore(BowlingFramesQueue frames)
         {
-            return OpenValue;
+            return new FrameScore(OpenValue);
         }
     }
 }

@@ -30,13 +30,13 @@ namespace tests.unit
         [InlineData(3, 2)]
         public void Expectations_FromLastFrame_GetScore(int frameUnderTestIndex, int expectedResult)
         {
-            Assert.Equal(expectedResult, _framesUnderTest[frameUnderTestIndex].GetScore(new BowlingFramesQueue()));
+            Assert.Equal(expectedResult, _framesUnderTest[frameUnderTestIndex].GetScore(new BowlingFramesQueue()).Value);
         }
 
         [Fact]
         public void LastFrame_Consumes2()
         {
-            Assert.Equal(2, _frameUnderTest.Consumes);
+            Assert.Equal(2, _frameUnderTest.ConsumesRolls);
         }
     }
 }

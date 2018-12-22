@@ -13,16 +13,16 @@ namespace app {
 
         public int OpenValue => _rollSum;
 
-        public int Consumes => 1;
+        public int ConsumesRolls => 1;
 
         public List<IBowlingFrame> GetInternalFrames()
         {
             return new List<IBowlingFrame>(){this};
         }
 
-        public int GetScore(BowlingFramesQueue frames)
+        public IFrameScore GetScore(BowlingFramesQueue frames)
         {
-            return _rollSum;
+            return new FrameScore(_rollSum);
         }
     }
 }
